@@ -14,8 +14,7 @@
         android:layout_height="100dp"
         android:src="@drawable/ic_logo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Pertanyaan -->
     <TextView
@@ -59,33 +58,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="18-25"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/answer2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="26-35"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:background="@drawable/button_background" />
 
         <Button
             android:id="@+id/answer3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="36-45"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:background="@drawable/button_background" />
 
     </LinearLayout>
 
