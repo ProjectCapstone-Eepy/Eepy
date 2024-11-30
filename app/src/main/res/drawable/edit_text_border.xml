@@ -1,9 +1,16 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@android:color/transparent" /> <!-- Warna latar belakang -->
+    <!-- Warna latar belakang -->
+    <solid android:color="@android:color/transparent" />
+
+    <!-- Warna garis tepi dinamis -->
     <stroke
         android:width="2dp"
-        android:color="@android:color/black" />
+        android:color="?attr/colorOnBackground" />
+
+    <!-- Sudut melengkung -->
     <corners android:radius="8dp" />
+
+    <!-- Padding dalam -->
     <padding
         android:left="8dp"
         android:top="8dp"

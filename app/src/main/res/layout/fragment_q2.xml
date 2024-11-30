@@ -25,7 +25,7 @@
         android:text="Gender"
         android:textSize="27sp"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,11 +38,10 @@
         android:text="Apa jenis kelamin Anda?"
         android:textSize="20sp"
         android:gravity="center"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintTop_toBottomOf="@id/category"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
-
-
 
     <LinearLayout
         android:id="@+id/answersContainer"
@@ -61,8 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Laki-Laki"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@android:color/white"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="30sp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -75,14 +74,12 @@
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:text="Perempuan"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@android:color/white"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnBackground"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:padding="16dp"
             android:background="@drawable/button_background" />
-
-
 
     </LinearLayout>
 

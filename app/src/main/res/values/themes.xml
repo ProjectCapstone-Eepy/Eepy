@@ -1,9 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.EepyApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/blue</item>
-    </style>
+    <style name="Theme.EepyApp" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Warna Utama -->
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/dark_blue</item>
+        <item name="colorSecondary">@color/light_blue</item>
 
-    <style name="Theme.EepyApp" parent="Base.Theme.EepyApp" />
+        <!-- Warna Background -->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+
+        <item name="colorCardBackground">@color/light_card</item>
+
+    </style>
 </resources>

@@ -1,20 +1,32 @@
 package com.example.eepyapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SurveyActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private val surveyResponses = mutableMapOf<String, Any>()
-    private val sleepData = mutableMapOf<String, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_survey)
 
+        // Periksa apakah ini mode pembaruan
+        val isUpdating = intent.getBooleanExtra("isUpdating", false)
+
+        // Jika bukan pembaruan dan survey sudah dilakukan hari ini, langsung ke Home
+        if (!isUpdating && isSurveyDoneToday()) {
+            navigateToHome()
+            return
+        }
+
+        setContentView(R.layout.activity_survey)
         viewPager = findViewById(R.id.viewPager)
 
         val fragments = listOf(
@@ -36,6 +48,7 @@ class SurveyActivity : AppCompatActivity() {
             },
             Q3Fragment { response ->
                 saveSleepData(response.first, response.second)
+                saveSurveyDate()
                 navigateToHome()
             }
         )
@@ -44,8 +57,19 @@ class SurveyActivity : AppCompatActivity() {
     }
 
     private fun saveSleepData(date: String, sleep: Int) {
-        sleepData[date] = sleep
-        Log.d("SurveyActivity", "Sleep Data: $sleepData")
+        val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Ambil data sebelumnya
+        val sleepDataString = sharedPreferences.getString("sleepData", "{}") ?: "{}"
+        val sleepDataMap = Gson().fromJson(sleepDataString, HashMap::class.java) as HashMap<String, Int>
+
+        // Tambahkan data baru atau perbarui
+        sleepDataMap[date] = sleep
+        editor.putString("sleepData", Gson().toJson(sleepDataMap))
+        editor.apply()
+
+        Log.d("SurveyActivity", "Sleep Data Updated: $sleepDataMap")
     }
 
     private fun navigateToNextPage() {
@@ -59,9 +83,26 @@ class SurveyActivity : AppCompatActivity() {
 
     private fun navigateToHome() {
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("sleepData", HashMap(sleepData))
-        intent.putExtra("responses", HashMap(surveyResponses))
         startActivity(intent)
         finish()
+    }
+
+    private fun isSurveyDoneToday(): Boolean {
+        val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
+        val lastDate = sharedPreferences.getString("lastSurveyDate", null)
+        val currentDate = getCurrentDate()
+        return lastDate == currentDate
+    }
+
+    private fun saveSurveyDate() {
+        val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("lastSurveyDate", getCurrentDate())
+        editor.apply()
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 }
