@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class Q3Fragment(private val onAnswer: (Int) -> Unit) : Fragment(R.layout.fragment_q3) {
+class Q3Fragment(private val onAnswer: (Pair<String, Int>) -> Unit) : Fragment(R.layout.fragment_q3) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -19,7 +21,9 @@ class Q3Fragment(private val onAnswer: (Int) -> Unit) : Fragment(R.layout.fragme
         nextButton.setOnClickListener {
             val sleep = sleepInput.text.toString().toIntOrNull()
             if (sleep != null) {
-                onAnswer(sleep)
+                // Mendapatkan tanggal hari ini dalam format "dd-MM-yyyy"
+                val currentDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+                onAnswer(Pair(currentDate, sleep)) // Kirim tanggal dan durasi tidur
             } else {
                 sleepInput.error = "Masukan format jam yang benar!"
             }

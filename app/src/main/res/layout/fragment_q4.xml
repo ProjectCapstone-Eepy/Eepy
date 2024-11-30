@@ -1,16 +1,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:layout_marginHorizontal="8dp"
-    tools:context=".Q1Fragment">
+    android:padding="16dp">
 
     <!-- Logo -->
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/logo_physical"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ic_logo"
@@ -19,32 +16,31 @@
 
     <!-- Pertanyaan -->
     <TextView
-        android:id="@+id/category"
+        android:id="@+id/category_physical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Waktu Tidur"
+        android:text="Physical Activity"
         android:textSize="27sp"
         android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintTop_toBottomOf="@id/logo_physical"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/question"
+        android:id="@+id/question_physical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Berapa lama waktu tidur Anda dalam sehari? (Dalam Jam)"
+        android:text="Seberapa intense kegiatan sehari-harimu? (Dalam ukuran 1-10)"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/category"
+        app:layout_constraintTop_toBottomOf="@id/category_physical"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
 
-
-
+    <!-- Input -->
     <EditText
-        android:id="@+id/input_sleep"
+        android:id="@+id/input_physical"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:inputType="number"
@@ -57,8 +53,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Tombol -->
     <Button
-        android:id="@+id/next_button"
+        android:id="@+id/next_button_physical"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Next"
@@ -67,9 +64,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/button_background"
-        app:layout_constraintTop_toBottomOf="@+id/input_sleep" />
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/input_physical" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
