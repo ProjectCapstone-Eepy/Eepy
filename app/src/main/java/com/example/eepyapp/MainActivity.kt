@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,10 +15,36 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewpagerTips: ViewPager2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Fitur Tips
+
+        // Data Tips
+        val tipsList = listOf(
+            "Lakukan olahraga atau aktivitas ringan di siang hari untuk membantu tubuh lebih rileks saat malam.",
+            "Mandi dan pastikan tubuh nyaman sebelum tidur.",
+            "Ciptakan suasana kamar yang sejuk dan tenang, seperti meredupkan lampu untuk relaksasi.",
+            "Hindari distraksi seperti notifikasi ponsel agar tidur lebih nyenyak.",
+            "Kurangi konsumsi kafein di sore atau malam hari agar tidur lebih berkualitas.",
+            "Nikmati makan malam secukupnya dan hindari makanan berat menjelang tidur.",
+            "Baca buku favorit untuk membantu pikiran rileks sebelum tidur.",
+            "Yakinkan diri bahwa sekarang adalah saatnya istirahat agar tubuh pulih dengan optimal.",
+            "Lakukan teknik pernapasan mendalam seperti meditasi untuk merilekskan tubuh dan pikiran.",
+            "Biarkan imajinasi berjalan bebas, pikirkan hal-hal menyenangkan untuk mengantarkan tidur.",
+            "Akhiri hari dengan melakukan sesuatu yang memuaskan agar tidur terasa lebih tenang."
+        )
+
+
+        // Inisialisasi ViewPager2
+        viewpagerTips = findViewById(R.id.vpTips)
+        viewpagerTips.adapter = TipsAdapter(tipsList)
+
+
+        // Fitur Bar Chart
         // Inisialisasi BarChart
         val barChart = findViewById<BarChart>(R.id.sleepGraph)
 
