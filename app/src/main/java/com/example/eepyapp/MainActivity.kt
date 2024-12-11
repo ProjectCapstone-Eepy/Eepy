@@ -3,10 +3,16 @@ package com.example.eepyapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.example.eepyapp.data.response.SleepDurationRequest
+import com.example.eepyapp.data.response.SleepDurationResponse
+import com.example.eepyapp.data.response.SleepQualityRequest
+import com.example.eepyapp.data.response.SleepQualityResponse
+import com.example.eepyapp.data.retrofit.ApiConfig
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,6 +20,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewpagerTips: ViewPager2
@@ -22,15 +31,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Tampilkan Waktu Tidur Ideal
+        fetchLatestDataFromApi()
+
         val tvSleepTime = findViewById<TextView>(R.id.tvSleepTime)
         tvSleepTime.text = loadSleepDuration()
 
-        // Tampilkan Kualitas Tidur
         val tvSleepQuality = findViewById<TextView>(R.id.tvSleepQuality)
         tvSleepQuality.text = loadSleepQualityDescription()
 
-        // Inisialisasi ViewPager2 untuk Tips
         val tipsList = listOf(
             "Lakukan olahraga atau aktivitas ringan di siang hari untuk membantu tubuh lebih rileks saat malam.",
             "Mandi dan pastikan tubuh nyaman sebelum tidur.",
@@ -47,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         viewpagerTips = findViewById(R.id.vpTips)
         viewpagerTips.adapter = TipsAdapter(tipsList)
 
-        // Bar Chart untuk Sleep Trends
         val barChart = findViewById<BarChart>(R.id.sleepGraph)
         val sleepData = loadSleepData()
         val entries = sleepData.entries.mapIndexed { index, entry ->
@@ -79,13 +86,77 @@ class MainActivity : AppCompatActivity() {
         leftAxis.textSize = 16f
         barChart.invalidate()
 
-        // Tombol untuk Update Survey
         val btnUpdateSurvey = findViewById<Button>(R.id.btnUpdateSurvey)
         btnUpdateSurvey.setOnClickListener {
             val intent = Intent(this, SurveyActivity::class.java)
             intent.putExtra("isUpdating", true)
             startActivity(intent)
         }
+    }
+
+    private fun fetchLatestDataFromApi() {
+        val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
+        val gender = sharedPreferences.getInt("lastGender", -1)
+        val age = sharedPreferences.getInt("lastAge", -1)
+        val physicalActivity = sharedPreferences.getInt("lastPhysicalActivity", -1)
+        val stressLevel = sharedPreferences.getInt("lastStressLevel", -1)
+        val sleepDuration = sharedPreferences.getInt("lastSleepDuration", -1)
+
+        if (gender == -1 || age == -1 || physicalActivity == -1 || stressLevel == -1 || sleepDuration == -1) {
+            Log.e("MainActivity", "Tidak ada data survei terbaru. Survei harus dilakukan dahulu.")
+            return
+        }
+
+        val qualityRequest = SleepQualityRequest(gender, age, physicalActivity * 10, stressLevel, sleepDuration)
+        val durationRequest = SleepDurationRequest(gender, age, physicalActivity * 10, stressLevel)
+
+        ApiConfig.getApiService().predictSleepQuality(qualityRequest).enqueue(object :
+            Callback<SleepQualityResponse> {
+            override fun onResponse(call: Call<SleepQualityResponse>, response: Response<SleepQualityResponse>) {
+                if (response.isSuccessful) {
+                    val prediction = response.body()?.prediction ?: 0f
+                    saveToPreferences("quality", prediction)
+                    updateUi()
+                } else {
+                    Log.e("MainActivity", "Gagal mengambil prediksi kualitas tidur: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SleepQualityResponse>, t: Throwable) {
+                Log.e("MainActivity", "Gagal terhubung ke API untuk kualitas tidur: ${t.message}")
+            }
+        })
+
+        ApiConfig.getApiService().predictSleepDuration(durationRequest).enqueue(object : Callback<SleepDurationResponse> {
+            override fun onResponse(call: Call<SleepDurationResponse>, response: Response<SleepDurationResponse>) {
+                if (response.isSuccessful) {
+                    val prediction = response.body()?.prediction ?: 0f
+                    saveToPreferences("duration", prediction)
+                    updateUi()
+                } else {
+                    Log.e("MainActivity", "Gagal mengambil prediksi durasi tidur: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SleepDurationResponse>, t: Throwable) {
+                Log.e("MainActivity", "Gagal terhubung ke API untuk durasi tidur: ${t.message}")
+            }
+        })
+    }
+
+    private fun saveToPreferences(key: String, value: Float) {
+        val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putFloat(key, value)
+        editor.apply()
+    }
+
+    private fun updateUi() {
+        val tvSleepTime = findViewById<TextView>(R.id.tvSleepTime)
+        tvSleepTime.text = loadSleepDuration()
+
+        val tvSleepQuality = findViewById<TextView>(R.id.tvSleepQuality)
+        tvSleepQuality.text = loadSleepQualityDescription()
     }
 
     private fun loadSleepData(): HashMap<String, Int> {
@@ -118,9 +189,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSleepQualityDescription(quality: Float): String {
         return when {
-            quality < 5 -> "Kualitas tidur Anda kurang baik. Disarankan untuk memperbaiki pola tidur."
-            quality < 8 -> "Kualitas tidur Anda cukup baik, namun masih dapat ditingkatkan."
-            quality <= 10 -> "Kualitas tidur Anda sangat baik! Pertahankan pola tidur seperti ini."
+            quality < 5 -> "Buruk!"
+            quality < 8 -> "Sudah Cukup Baik!"
+            quality <= 10 -> "Sangat Baik!"
             else -> "Data kualitas tidur tidak valid."
         }
     }

@@ -16,7 +16,7 @@ class Q4Fragment(private val onAnswer: (Int) -> Unit) : Fragment(R.layout.fragme
         nextButton.setOnClickListener {
             val physicalValue = inputPhysical.text.toString().toIntOrNull()
             if (physicalValue != null && physicalValue in 1..10) {
-                onAnswer(physicalValue * 10) // x10 sebelum dikirim
+                onAnswer(physicalValue)
             } else {
                 inputPhysical.error = "Input harus di antara 1-10"
             }
