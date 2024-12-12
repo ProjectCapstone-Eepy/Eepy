@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val prediction = response.body()?.prediction ?: 0f
                     saveToPreferences("quality", prediction)
+                    Log.d("MainActivity", "Sleep Quality Prediction (Float): $prediction")
                     updateUi()
                 } else {
                     Log.e("MainActivity", "Gagal mengambil prediksi kualitas tidur: ${response.errorBody()?.string()}")
@@ -132,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val prediction = response.body()?.prediction ?: 0f
                     saveToPreferences("duration", prediction)
+                    Log.d("MainActivity", "Sleep Duration Prediction (Float): $prediction")
                     updateUi()
                 } else {
                     Log.e("MainActivity", "Gagal mengambil prediksi durasi tidur: ${response.errorBody()?.string()}")
@@ -190,8 +192,8 @@ class MainActivity : AppCompatActivity() {
     private fun getSleepQualityDescription(quality: Float): String {
         return when {
             quality < 5 -> "Buruk"
-            quality < 8 -> "Sudah Cukup Baik"
-            quality <= 10 -> "Sangat Baik"
+            quality < 7 -> "Cukup baik"
+            quality <= 10 -> "Nyenyak sekali"
             else -> "Data kualitas tidur tidak valid."
         }
     }
