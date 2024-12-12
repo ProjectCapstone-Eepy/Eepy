@@ -53,6 +53,7 @@ class SurveyActivity : AppCompatActivity() {
                 navigateToNextPage()
             },
             Q3Fragment { response ->
+                saveResponse("sleepDuration", response.second)
                 saveSleepData(response.first, response.second)
                 sendDataToApi()
                 saveSurveyDate()
@@ -100,6 +101,8 @@ class SurveyActivity : AppCompatActivity() {
         val physicalActivity = (surveyResponses["physicalActivity"] as? Int) ?: 0
         val stressLevel = (surveyResponses["stressLevel"] as? Int) ?: 0
         val sleepDuration = (surveyResponses["sleepDuration"] as? Int) ?: 0
+
+        Log.d("SurveyActivity", "Sending to API - Gender: $gender, Age: $age, Physical Activity: $physicalActivity, Stress Level: $stressLevel, Sleep Duration: $sleepDuration")
 
         val qualityRequest = SleepQualityRequest(gender, age, physicalActivity, stressLevel, sleepDuration)
         val durationRequest = SleepDurationRequest(gender, age, physicalActivity, stressLevel)
@@ -166,6 +169,7 @@ class SurveyActivity : AppCompatActivity() {
         val currentDate = getCurrentDate()
         return lastDate == currentDate
     }
+
 
     private fun saveSurveyDate() {
         val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
