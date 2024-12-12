@@ -81,24 +81,25 @@ class SurveyActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        editor.putInt("lastGender", surveyResponses["gender"] as Int)
-        editor.putInt("lastAge", surveyResponses["age"] as Int)
-        editor.putInt("lastPhysicalActivity", surveyResponses["physicalActivity"] as Int)
-        editor.putInt("lastStressLevel", surveyResponses["stressLevel"] as Int)
-        editor.putInt("lastSleepDuration", surveyResponses["sleepDuration"] as Int)
+        editor.putInt("lastGender", (surveyResponses["gender"] as? Int) ?: 0)
+        editor.putInt("lastAge", (surveyResponses["age"] as? Int) ?: 0)
+        editor.putInt("lastPhysicalActivity", (surveyResponses["physicalActivity"] as? Int) ?: 0)
+        editor.putInt("lastStressLevel", (surveyResponses["stressLevel"] as? Int) ?: 0)
+        editor.putInt("lastSleepDuration", (surveyResponses["sleepDuration"] as? Int) ?: 0)
 
         editor.apply()
         Log.d("SurveyActivity", "Survey responses saved to preferences.")
     }
 
+
     private fun sendDataToApi() {
         saveInputToPreferences()
 
-        val gender = surveyResponses["gender"] as Int
-        val age = surveyResponses["age"] as Int
-        val physicalActivity = surveyResponses["physicalActivity"] as Int
-        val stressLevel = surveyResponses["stressLevel"] as Int
-        val sleepDuration = surveyResponses["sleepDuration"] as Int
+        val gender = (surveyResponses["gender"] as? Int) ?: 0
+        val age = (surveyResponses["age"] as? Int) ?: 0
+        val physicalActivity = (surveyResponses["physicalActivity"] as? Int) ?: 0
+        val stressLevel = (surveyResponses["stressLevel"] as? Int) ?: 0
+        val sleepDuration = (surveyResponses["sleepDuration"] as? Int) ?: 0
 
         val qualityRequest = SleepQualityRequest(gender, age, physicalActivity, stressLevel, sleepDuration)
         val durationRequest = SleepDurationRequest(gender, age, physicalActivity, stressLevel)
@@ -135,6 +136,7 @@ class SurveyActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun savePredictionToPreferences(key: String, value: Float) {
         val sharedPreferences = getSharedPreferences("EepyPreferences", Context.MODE_PRIVATE)

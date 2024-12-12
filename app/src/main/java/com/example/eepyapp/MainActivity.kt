@@ -189,9 +189,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSleepQualityDescription(quality: Float): String {
         return when {
-            quality < 5 -> "Buruk!"
-            quality < 8 -> "Sudah Cukup Baik!"
-            quality <= 10 -> "Sangat Baik!"
+            quality < 5 -> "Buruk"
+            quality < 8 -> "Sudah Cukup Baik"
+            quality <= 10 -> "Sangat Baik"
             else -> "Data kualitas tidur tidak valid."
         }
     }

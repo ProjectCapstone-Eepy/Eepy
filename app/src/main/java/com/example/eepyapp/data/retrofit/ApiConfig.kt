@@ -14,7 +14,7 @@ class ApiConfig {
                 .addInterceptor(loggingInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://restaurant-api.dicoding.dev/") // Nunggu dari CC
+                .baseUrl("https://cc-deploy-1040387314986.asia-southeast2.run.app/") // Nunggu dari CC
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
