@@ -107,8 +107,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val qualityRequest = SleepQualityRequest(gender, age, physicalActivity * 10, stressLevel, sleepDuration)
-        val durationRequest = SleepDurationRequest(gender, age, physicalActivity * 10, stressLevel)
+        val qualityRequest = SleepQualityRequest(gender, age, physicalActivity , stressLevel, sleepDuration)
+        val durationRequest = SleepDurationRequest(gender, age, physicalActivity , stressLevel)
 
         ApiConfig.getApiService().predictSleepQuality(qualityRequest).enqueue(object :
             Callback<SleepQualityResponse> {
